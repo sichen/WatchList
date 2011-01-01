@@ -115,10 +115,6 @@
 		<plugin id="parse-msexcel" />
 	</mimeType>
 	
-	<mimeType name="text/html">
-		<plugin id="parse-html" />
-	</mimeType>
-
 	<mimeType name="text/plain">
 		<plugin id="parse-text" />
 	</mimeType>
@@ -139,6 +135,14 @@
 		<plugin id="parse-msexcel" />
 	</mimeType>
 -->
+<!-- Si Chen: I am adding back parse-html as the html parser
+     instead of tika, because tika doesn't build DOM tree for 
+     us by default. parse-html will use cyberneko to do it.
+-->
+	<mimeType name="text/html">
+		<plugin id="parse-html" />
+	</mimeType>
+
 
     <mimeType name="application/xhtml+xml">
 		<plugin id="parse-html" />
