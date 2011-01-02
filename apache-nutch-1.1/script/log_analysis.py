@@ -14,6 +14,7 @@ from optparse import OptionParser
 
 def build_error_set(log_file):
     currentURL = None
+    total_records = 0
     dict = {}
     try:
         f = open(log_file)
@@ -34,6 +35,7 @@ def build_error_set(log_file):
                             l = line.split(":")
                             m = len(l) -1
                             title = l[m].strip()
+                            total_records += 1
                         if line.find("is null") > 0:
                             if dict.has_key(currentURL):
                                 dict[currentURL].append(title)
@@ -49,7 +51,8 @@ def build_error_set(log_file):
                 continue
     finally:
         f.close()
-        print "totally found: " + str(len(dict))
+        print "totally found: " + str(total_records) + "records"
+        print "totally found: " + str(len(dict)) + "problems"
         return dict
 
 
