@@ -49,7 +49,7 @@ def build_error_set(log_file):
                 continue
     finally:
         f.close()
-        print "totally found: " + len(dict)
+        print "totally found: " + str(len(dict))
         return dict
 
 
@@ -108,7 +108,7 @@ def main():
         print "IOError: %s" % (str(e))
         sys.exit(1)
     finally:
-        print "processed: " + processed
+        print "processed: " + str(processed)
         
 
 

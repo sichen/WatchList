@@ -57,6 +57,9 @@ echo "----- Generate, Fetch, Parse, Update (Step 2 of $steps) -----"
 for((i=0; i < $depth; i++))
 do
   echo "--- Beginning crawl at depth `expr $i + 1` of $depth ---"
+  # add a counter to count execution time
+  start_time=$(date +%s)
+
   $NUTCH_HOME/bin/nutch generate crawl/crawldb crawl/segments $topN \
       -adddays $adddays
   if [ $? -ne 0 ]
@@ -76,6 +79,17 @@ do
   fi
 
   $NUTCH_HOME/bin/nutch updatedb crawl/crawldb $segment
+  
+  # calculate the execution time
+  end_time=$(date +%s)
+  totalseconds=$((end_time-start_time))
+  hours=$((totalseconds/3600))
+  remainder=$((totalseconds%3600))
+  minutes=$((remainder/60))
+  seconds=$((remainder%60))
+  echo "Finished depth `expr $i +1` in: $hours hours $minutes minutes $seconds seconds"
+
+
 done
 
 echo "----- Merge Segments (Step 3 of $steps) -----"

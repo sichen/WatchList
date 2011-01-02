@@ -39,8 +39,8 @@
 
 # Si: I want to get rid of some unnecessary urls
 # from J.Crew site, to imporve performance
--formObj\.
--document\.getElementByName
+-.*formObj\.
+-.*document\.getElementByName
 
 # accept anything else
 -.
