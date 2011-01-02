@@ -17,4 +17,12 @@
   a good idea to begin migrating away from anything not provided by parse-tika.
   </description>
 </property>
+
+<property>
+  <name>urlfilter.regex.file</name>
+  <value>wl-regex-urlfilter.txt</value>
+  <description>Name of file on CLASSPATH containing regular expressions
+  used by urlfilter-regex (RegexURLFilter) plugin.</description>
+</property>
+
 </configuration>
