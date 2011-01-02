@@ -182,7 +182,7 @@
   <target name="test" depends="compile-test, deploy" if="test.available">
     <echo message="Testing plugin: ${name}"/>
 
-    <junit printsummary="yes" haltonfailure="no" fork="yes"
+    <junit maxmemory="512m" printsummary="yes" haltonfailure="no" fork="yes"
       errorProperty="tests.failed" failureProperty="tests.failed">
       <sysproperty key="test.data" value="${build.test}/data"/>
       <sysproperty key="test.input" value="${root}/data"/>

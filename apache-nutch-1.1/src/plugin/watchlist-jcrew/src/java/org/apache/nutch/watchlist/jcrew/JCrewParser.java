@@ -70,7 +70,7 @@ public class JCrewParser implements HtmlParseFilter {
     // http://www.jcrew.com/mens_category/sweaters/cottoncashmere/PRDOVR~29234/29234.jsp
     // Sometimes, items on sale can have weird URL like below:
     // http://www.jcrew.com/boys_category/boxers/wovenboxers/PRDOVR~18007/ENE~1+2+3+22+4294967294+20~~~20+18~15~~~~~~~/18007.jsp
-    //"http://www.jcrew.com/AST/Navigation/Sale/AllProducts/PRDOVR~18212/99102181471/ENE~1+2+3+22+4294967294+20~~~20+18~15~~~~~~~/18212.jsp"
+    // "http://www.jcrew.com/AST/Navigation/Sale/AllProducts/PRDOVR~18212/99102181471/ENE~1+2+3+22+4294967294+20~~~20+18~15~~~~~~~/18212.jsp"
     private static final String JCREW_PRODUCT_URL_PATTERN = "http\\:\\/\\/www\\.jcrew\\.com\\/.*\\/PRDOVR~(\\d+).*\\/(\\d+)\\.jsp";
     private static final String JCREW_PRICE_PATTERN = "(\\d+\\.\\d+).*";
     private static final Pattern urlRegexp = Pattern.compile(JCREW_PRODUCT_URL_PATTERN);
@@ -82,8 +82,10 @@ public class JCrewParser implements HtmlParseFilter {
     public static final String META_PRODUCT_TITLE = "productTitle";
     public static final String META_PRICE = "price";
     public static final String META_IMG_URL = "imgURL";
-    // If it is a true product page, the html title has very valuable information
-    // like Category, Brand, Product Title, or anything the seller wants to tell.
+    // If it is a true product page, the html title has very valuable
+    // information
+    // like Category, Brand, Product Title, or anything the seller wants to
+    // tell.
     // We add it as a meta field, so we can boost its search score.
     public static final String META_JCREW_TITLE = "jcrew";
 
@@ -130,7 +132,6 @@ public class JCrewParser implements HtmlParseFilter {
         // Step 2: Extract the Product Title
         LOG.info("Started parsing title for JCrew Product Item: " + itemNumber);
 
-
         try {
             // Trying to find the document's rel-tags
             Parser parser = new Parser(doc, itemNumber);
@@ -152,7 +153,7 @@ public class JCrewParser implements HtmlParseFilter {
                 meta.add(META_PRICE, price);
                 LOG.info("Adding imgURL: " + imgURL);
                 meta.add(META_IMG_URL, imgURL);
-                
+
                 String htmlProductTitle = parse.getData().getTitle();
                 LOG.info("Adding jcrew title: " + htmlProductTitle);
                 meta.add(META_JCREW_TITLE, htmlProductTitle);
@@ -215,6 +216,21 @@ public class JCrewParser implements HtmlParseFilter {
             return imageURL;
         }
 
+        // Test if a string matches a valid float number
+        // Used to make sure the price is valid
+        // Return: the string that matches float
+        // null, if not matching a float number
+        private String matchFloat(String input) {
+            Matcher matcher = priceRegexp.matcher(input);
+            if (matcher.find()) {
+                // call parseFloat to make sure the
+                // float is valid
+                Float.parseFloat(matcher.group(1));
+                return matcher.group(1);
+            }
+            return null;
+        }
+
         void parse(Node node) {
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -231,43 +247,60 @@ public class JCrewParser implements HtmlParseFilter {
                     // Checks that it contains a class attribute
                     if (classNode != null) {
 
-                        if ("prodtitle".equalsIgnoreCase(classNode.getNodeValue())) {
+                        if ("prodtitle".equalsIgnoreCase(classNode.getNodeValue())
+                                || "producttitle".equalsIgnoreCase(classNode.getNodeValue())) {
                             // Search for title: checks that class="prodtitle"
-                            productTitle = node.getFirstChild().getNodeValue();
+                            // Note: if productTitle is not null, it means it is
+                            // already extracted
+                            // and we won't extract it again. This is because
+                            // some product pages
+                            // will contain multiple products related to the
+                            // main product, so the
+                            // first one is the correct.
+                            if (productTitle == null) {
+                                productTitle = node.getFirstChild().getNodeValue();
+                                if (productTitle != null) {
+                                    productTitle = productTitle.trim();
+                                }
+                            }
                             if (productTitle != null && !StringUtil.isEmpty(productTitle)) {
                                 if (LOG.isInfoEnabled()) {
                                     LOG.info("Got the productTitle for JCrew Product Item: "
                                             + itemNumber + ":" + productTitle);
                                 }
                             }
-                        } else if ("standard_nopad".equalsIgnoreCase(classNode.getNodeValue())) {
+                        } else if ("standard_nopad".equalsIgnoreCase(classNode.getNodeValue())
+                                || "standard".equalsIgnoreCase(classNode.getNodeValue())) {
                             // Search for price: checks that
                             // class="standard_nopad" and
                             // string value ends with "item itemNumber"
                             // JCrew has the format like: $88.00 item 33774
-                            String tempStr = node.getFirstChild().getNodeValue().trim();
-                            String[] textArray = tempStr.split("\\s+");
-                            int lastIndex = textArray.length -1;
+                            String tempStr = node.getFirstChild().getNodeValue();
+                            String tempStr2 = null;
+                            String[] textArray = null;
+                            int lastIndex = -1;
+                            if (tempStr != null) {
+                                tempStr = tempStr.trim();
+                                textArray = tempStr.split("\\s+");
+                                lastIndex = textArray.length - 1;
+                            }
                             if (lastIndex > 0 && textArray[lastIndex].endsWith(itemNumber)) {
-                                // Use "$" to make sure it is price
-                                if (textArray[0].startsWith("$")) {
+                                // Price could happen in any substring, so I
+                                // will just
+                                // use the original string to find "$" to make
+                                // sure it is price.
+                                int idxDollar = tempStr.indexOf("$");
+                                if (idxDollar >= 0) {
                                     // strip out the "$"
-                                    String priceStr = textArray[0].substring(1);
-                                    Matcher matcher = priceRegexp.matcher(priceStr);
-                                    if (matcher.find()) {
-                                        // call parseFloat to make sure the
-                                        // float is valid
-                                        Float.parseFloat(matcher.group(1));
-                                        price = matcher.group(1);
+                                    String priceStr = tempStr.substring(idxDollar + 1);
+                                    price = matchFloat(priceStr);
+                                    LOG.info("Got the price for JCrew Product Item: " + itemNumber
+                                            + ":" + price);
 
-                                        if (LOG.isInfoEnabled()) {
-                                            LOG.info("Got the price for JCrew Product Item: "
-                                                    + itemNumber + ":" + price);
-                                        }
-                                    }
                                 }
-                            } else if (node.getLastChild().getNodeValue().trim()
-                                    .endsWith(itemNumber)) {
+
+                            } else if ((tempStr2 = node.getLastChild().getNodeValue()) != null
+                                    && tempStr2.trim().endsWith(itemNumber)) {
                                 // Sometimes, JCrew has price drop for a short
                                 // time, it could
                                 // have the format like:
@@ -294,18 +327,10 @@ public class JCrewParser implements HtmlParseFilter {
                                     idx = tempStr.lastIndexOf("$");
                                     if (idx >= 0 && idx < tempStr.length() - 1) {
                                         String priceStr = tempStr.substring(idx + 1);
-                                        matcher = priceRegexp.matcher(priceStr);
-                                        if (matcher.find()) {
-                                            // call parseFloat to make sure the
-                                            // float is valid
-                                            Float.parseFloat(matcher.group(1));
-                                            price = matcher.group(1);
+                                        price = matchFloat(priceStr);
+                                        LOG.info("Got the price for JCrew Product Item: "
+                                                + itemNumber + ":" + price);
 
-                                            if (LOG.isInfoEnabled()) {
-                                                LOG.info("Got the price for JCrew Product Item: "
-                                                        + itemNumber + ":" + price);
-                                            }
-                                        }
                                     }
                                 }
                             }
@@ -322,8 +347,28 @@ public class JCrewParser implements HtmlParseFilter {
                     // The id="mainImg" is the search criteria
                     NamedNodeMap attrs = node.getAttributes();
                     Node idNode = attrs.getNamedItem("id");
+                    String idStr = (idNode != null) ? idNode.getNodeValue() : null;
                     // Checks that it contains a class attribute
-                    if (idNode != null && "mainImg".equalsIgnoreCase(idNode.getNodeValue())) {
+                    if (idNode != null && "mainImg".equalsIgnoreCase(idStr)) {
+                        Node srcNode = attrs.getNamedItem("src");
+                        imageURL = srcNode.getNodeValue();
+                        if (LOG.isInfoEnabled()) {
+                            LOG.info("Got the imageURL for JCrew Product Item: " + itemNumber + ":"
+                                    + imageURL);
+                        }
+                    } else if (idNode != null && idStr.startsWith("productOnFigureImage")
+                            && idStr.endsWith(itemNumber)) {
+                        // Some product pages will contain multiple products
+                        // that are related together.
+                        // On those pages, we don't have id="mainImg", but have
+                        // id="productOnFigureImage"+itemNum
+                        // For example:
+                        // <img name="productOnFigureImage16564"
+                        // id="productOnFigureImage16564"
+                        // src="http://images.jcrew.com/erez4/erez?src=images/onFigure/16/16564/16564_GY6480_m.tif&tmp=prdDtIm"
+                        // alt="Italian wool Aldridge two-button suit jacket with center vent"
+                        // onClick="popBlowup('16564',this.src, this.id,true);"
+                        // width="393" height="393" border="0">
                         Node srcNode = attrs.getNamedItem("src");
                         imageURL = srcNode.getNodeValue();
                         if (LOG.isInfoEnabled()) {
