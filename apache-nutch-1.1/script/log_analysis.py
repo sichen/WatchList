@@ -72,6 +72,9 @@ def main():
     try:
         error_dict = build_error_set(args[1])
         print "finally, log analysis is finished."
+        if options.no_testdata == True:
+            print "Skip test data generation"
+            return 0
         if not os.path.exists(args[2]):
             os.makedirs(args[2])
         pagelistFile = open(os.path.join(args[2], "pagelist.txt"), "w")
@@ -119,6 +122,11 @@ def options_parser(scriptname):
     usage = "Usage: " + scriptname + " log_file_path test_data_dir"
 
     parser = OptionParser(usage)
+    parser.add_option("-n", "--no-testdata-generation",
+                  action="store_true", dest="no_testdata", default=False,
+                  help="don't generate the test data")
+
+
 
     return parser
 
