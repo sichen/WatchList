@@ -1372,4 +1372,48 @@
   </description>
 </property>
 
+<!-- watchlist id generator properties -->
+
+<property>
+  <name>watchlist.idgenerator.jdbc.driver</name>
+  <value>com.mysql.jdbc.Driver</value>
+  <description>
+  The JDBC Driver used by ID Generator only.
+  The product data won't use jdbc directly, but ID generator uses jdbc directly.
+  </description>
+</property>
+
+<property>
+  <name>watchlist.idgenerator.jdbc.url</name>
+  <value>jdbc:mysql://localhost:3306/watchlist_id</value>
+  <description>
+  The JDBC Driver used by ID Generator only.
+  The product data won't use jdbc directly, but ID generator uses jdbc directly.
+  </description>
+</property>
+
+<property>
+  <name>watchlist.idgenerator.jdbc.user</name>
+  <value>watchlist</value>
+  <description>
+  The JDBC user.
+  </description>
+</property>
+
+<property>
+  <name>watchlist.idgenerator.jdbc.password</name>
+  <value>wrmfw</value>
+  <description>
+  The JDBC password.
+  </description>
+</property>
+
+<property>
+  <name>watchlist.idgenerator.jdbc.table</name>
+  <value>object</value>
+  <description>
+  The JDBC table name.
+  </description>
+</property>
+
 </configuration>
