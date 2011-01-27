@@ -86,11 +86,11 @@ public class TestMysqlIdGenerator extends TestCase {
         }
         
         // Prepare the configuration
-        conf.set(IdGenerator.JDBC_DRIVER, "com.mysql.jdbc.Driver");
-        conf.set(IdGenerator.JDBC_URL, "jdbc:mysql://localhost:3306/junit");
-        conf.set(IdGenerator.JDBC_USER, "watchlist");
-        conf.set(IdGenerator.JDBC_PASSWORD, "wrmfw");
-        conf.set(IdGenerator.JDBC_TABLE, "object");
+        conf.set(WatchListConfig.JDBC_DRIVER.getAttributeString(), "com.mysql.jdbc.Driver");
+        conf.set(WatchListConfig.JDBC_URL.getAttributeString(), "jdbc:mysql://localhost:3306/junit");
+        conf.set(WatchListConfig.JDBC_USER.getAttributeString(), "watchlist");
+        conf.set(WatchListConfig.JDBC_PASSWORD.getAttributeString(), "wrmfw");
+        conf.set(WatchListConfig.JDBC_ID_GEN_TABLE.getAttributeString(), "object");
         
         IdGenerator gen = new MysqlIdGenerator(conf);
         long result = gen.generate();
