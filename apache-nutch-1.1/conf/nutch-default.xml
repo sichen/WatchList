@@ -1384,7 +1384,7 @@
 
 <property>
   <name>watchlist.jdbc.url</name>
-  <value>jdbc:mysql://localhost:3306/watchlist_id</value>
+  <value>jdbc:mysql://localhost:3306/watchlist</value>
   <description>
   The JDBC URL to access Database.
   </description>

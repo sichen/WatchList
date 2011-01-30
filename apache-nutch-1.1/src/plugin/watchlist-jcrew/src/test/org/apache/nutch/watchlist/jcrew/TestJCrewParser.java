@@ -23,6 +23,7 @@ import org.apache.nutch.parse.ParseUtil;
 import org.apache.nutch.protocol.Content;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.nutch.util.NutchConfiguration;
+import org.apache.nutch.watchlist.WatchListConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -909,7 +910,7 @@ public class TestJCrewParser extends TestCase {
 
         // This is a test case, make sure we don't mess up with main database
         // set the database to junkdb
-        conf.set(IdGenerator.JDBC_URL, "jdbc:mysql://localhost:3306/junkdb");
+        conf.set(WatchListConfig.JDBC_URL.getAttributeString(), "jdbc:mysql://localhost:3306/junkdb");
 
         Content content = new Content(url, url, bytes, contentType, new Metadata(), conf);
         Parse parse = new ParseUtil(conf).parseByExtensionId("parse-html", content).get(url);
