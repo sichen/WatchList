@@ -1372,4 +1372,45 @@
   </description>
 </property>
 
+<!-- watchlist id generator properties -->
+
+<property>
+  <name>watchlist.jdbc.driver</name>
+  <value>com.mysql.jdbc.Driver</value>
+  <description>
+  JDBC Driver to be used.
+  </description>
+</property>
+
+<property>
+  <name>watchlist.jdbc.url</name>
+  <value>jdbc:mysql://localhost:3306/watchlist</value>
+  <description>
+  The JDBC URL to access Database.
+  </description>
+</property>
+
+<property>
+  <name>watchlist.jdbc.user</name>
+  <value>watchlist</value>
+  <description>
+  The JDBC user.
+  </description>
+</property>
+
+<property>
+  <name>watchlist.jdbc.password</name>
+  <value>wrmfw</value>
+  <description>
+  The JDBC password.
+  </description>
+</property>
+
+<property>
+  <name>watchlist.jdbc.idgenerator.table</name>
+  <value>object</value>
+  <description>
+  The JDBC table name.
+  </description>
+</property>
 </configuration>

@@ -23,6 +23,7 @@ import org.apache.nutch.parse.ParseUtil;
 import org.apache.nutch.protocol.Content;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.nutch.util.NutchConfiguration;
+import org.apache.nutch.watchlist.WatchListConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class TestJCrewParser extends TestCase {
                 "Italian wool Ludlow three-button suit jacket with center vent",
                 "http://www.jcrew.com/mens_special_shops/themonogramshop/suiting/PRDOVR~16563/16563.jsp");
 
-	//        pageTest(new File(testDir, "15771.jsp"), "Tall jaspŽ crewneck tee",
+	//        pageTest(new File(testDir, "15771.jsp"), "Tall jaspÂŽ crewneck tee",
 	//                "http://www.jcrew.com/mens_special_sizes/tall/polostees/PRDOVR~15771/15771.jsp");
 
 	//        pageTest(new File(testDir, "81595.jsp"), "Kids' Converse¨ Jack Purcell¨ sneakers",
@@ -308,13 +309,13 @@ public class TestJCrewParser extends TestCase {
         pageTest(new File(testDir, "28657.jsp"), "D-cup solid ruched halter tank",
                 "http://www.jcrew.com/womens_special_sizes/specialswimsizes/Dcup/PRDOVR~28657/28657.jsp");
 
-	//        pageTest(new File(testDir, "13259.jsp"), "JaspŽ crewneck tee",
+	//        pageTest(new File(testDir, "13259.jsp"), "JaspÂŽ crewneck tee",
 	//                "http://www.jcrew.com/mens_special_shops/theresortshop/PRDOVR~13259/13259.jsp");
 
         pageTest(new File(testDir, "16852.jsp"), "Italian wool pinstripe Ludlow suit pant",
                 "http://www.jcrew.com/wedding/Wedding_Groom_Groomsmen/suits/PRDOVR~16852/16852.jsp");
 
-	//        pageTest(new File(testDir, "15770.jsp"), "Tall jaspŽ V-neck tee",
+	//        pageTest(new File(testDir, "15770.jsp"), "Tall jaspÂŽ V-neck tee",
 	//                "http://www.jcrew.com/mens_special_sizes/tall/polostees/PRDOVR~15770/15770.jsp");
 
         pageTest(new File(testDir, "97904.jsp"), "Point-collar regular-fit dress shirt in white",
@@ -492,7 +493,7 @@ public class TestJCrewParser extends TestCase {
         pageTest(new File(testDir, "29237.jsp"), "Tall cotton-cashmere crewneck sweater",
                 "http://www.jcrew.com/mens_special_sizes/tall/sweaters/PRDOVR~29237/29237.jsp");
 
-	//        pageTest(new File(testDir, "13259.jsp"), "JaspŽ crewneck tee",
+	//        pageTest(new File(testDir, "13259.jsp"), "JaspÂŽ crewneck tee",
 	//                "http://www.jcrew.com/mens_category/polostees/jaspe/PRDOVR~13259/13259.jsp");
 
         pageTest(new File(testDir, "88041.jsp"), "Sterling-silver tie clip",
@@ -906,6 +907,10 @@ public class TestJCrewParser extends TestCase {
         in.close();
         byte[] bytes = out.toByteArray();
         Configuration conf = NutchConfiguration.create();
+
+        // This is a test case, make sure we don't mess up with main database
+        // set the database to junkdb
+        conf.set(WatchListConfig.JDBC_URL.getAttributeString(), "jdbc:mysql://localhost:3306/junkdb");
 
         Content content = new Content(url, url, bytes, contentType, new Metadata(), conf);
         Parse parse = new ParseUtil(conf).parseByExtensionId("parse-html", content).get(url);

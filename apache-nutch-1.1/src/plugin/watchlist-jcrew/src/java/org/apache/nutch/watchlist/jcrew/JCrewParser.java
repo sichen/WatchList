@@ -52,6 +52,8 @@ import org.apache.nutch.parse.ParseStatus;
 import org.apache.nutch.parse.ParseText;
 import org.apache.nutch.protocol.Content;
 import org.apache.nutch.util.StringUtil;
+import org.apache.nutch.watchlist.IdGenerator;
+import org.apache.nutch.watchlist.MysqlIdGenerator;
 
 // Hadoop imports
 import org.apache.hadoop.conf.Configuration;
@@ -91,6 +93,7 @@ public class JCrewParser implements HtmlParseFilter {
 
     public final static Log LOG = LogFactory.getLog(JCrewParser.class);
     private Configuration conf = null;
+    private IdGenerator idGenerator = null;
 
     /**
      * Scan the HTML document looking at product information
@@ -103,8 +106,8 @@ public class JCrewParser implements HtmlParseFilter {
         // Step 1: ignore non-product pages from JCrew
         URL base;
         try {
-            base = new URL(content.getUrl());
-	    if (LOG.isInfoEnabled()) {
+            base = new URL(content.getBaseUrl());
+            if (LOG.isInfoEnabled()) {
                 LOG.info("Start parsing: " + base.toString());
 	    }
             Matcher matcher = urlRegexp.matcher(base.toString());
@@ -158,9 +161,13 @@ public class JCrewParser implements HtmlParseFilter {
                 meta.add(META_JCREW_TITLE, htmlProductTitle);
 
                 // 2. write these information into database
-                // TBD in next check-in
+
+                long id = idGenerator.generate("");
+                LOG.info("Got ID: " + id);
 
             } else {
+                long id = idGenerator.generate("");
+                LOG.info("Got ID: " + id);
                 // At least something wrong
                 if (LOG.isWarnEnabled()) {
                     LOG.warn("Partially parsed " + base + ": ");
@@ -394,6 +401,7 @@ public class JCrewParser implements HtmlParseFilter {
      */
     public void setConf(Configuration conf) {
         this.conf = conf;
+        idGenerator = new MysqlIdGenerator(getConf());
     }
 
     public Configuration getConf() {
