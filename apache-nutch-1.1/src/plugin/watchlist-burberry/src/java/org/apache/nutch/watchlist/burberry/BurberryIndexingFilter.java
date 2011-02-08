@@ -1,0 +1,96 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.nutch.watchlist.burberry;
+
+// Nutch imports
+import org.apache.nutch.crawl.CrawlDatum;
+import org.apache.nutch.crawl.Inlinks;
+import org.apache.nutch.indexer.IndexingFilter;
+import org.apache.nutch.indexer.IndexingException;
+import org.apache.nutch.indexer.NutchDocument;
+import org.apache.nutch.indexer.lucene.LuceneWriter;
+import org.apache.hadoop.io.Text;
+import org.apache.nutch.parse.Parse;
+
+// Hadoop imports
+import org.apache.hadoop.conf.Configuration;
+
+/**
+ * add Lucene index field(s) to the document.
+ * 
+ * @author Jun Yang
+ */
+public class BurberryIndexingFilter implements IndexingFilter {
+
+    private Configuration conf;
+
+    public NutchDocument filter(NutchDocument doc,
+				Parse parse,
+				Text url,
+				CrawlDatum datum,
+				Inlinks inlinks) throws IndexingException {
+	String[] keys = getMetaKeys();
+	for (int i = 0; i < keys.length; i++) {
+	    String[] values = parse.getData().getParseMeta().getValues(keys[i]);
+	    if (values != null) {
+		for (int j = 0; j < values.length; j++) {
+		    doc.add(keys[i], values[j]);
+		}
+	    }
+        }
+	return doc;
+    }
+
+    public void addIndexBackendOptions(Configuration conf) {
+	String[] keys = getMetaKeys();
+	for (int i = 0; i < keys.length; i++) {
+	    LuceneWriter.addFieldOptions(keys[i],
+					 LuceneWriter.STORE.YES,
+					 LuceneWriter.INDEX.UNTOKENIZED,
+					 conf);
+	}
+    }
+
+    private static String[] getMetaKeys() {
+	String[] keys = {
+	    BurberryParser.META_BRAND,
+	    BurberryParser.META_ID,
+	    BurberryParser.META_NAME,
+	    BurberryParser.META_PRICE,
+	    BurberryParser.META_IMG_URL,
+	    BurberryParser.META_PAGE_TITLE
+	};
+	return keys;
+    }
+
+    /*
+     * ----------------------------- * <implementation:Configurable> *
+     * -----------------------------
+     */
+    public void setConf(Configuration conf) {
+        this.conf = conf;
+    }
+
+    public Configuration getConf() {
+        return this.conf;
+    }
+
+    /*
+     * ------------------------------ * </implementation:Configurable> *
+     * ------------------------------
+     */
+}

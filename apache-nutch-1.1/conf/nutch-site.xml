@@ -4,7 +4,7 @@
 <configuration>
 <property>
   <name>plugin.includes</name>
-  <value>watchlist-jcrew|creativecommons|protocol-http|urlfilter-regex|parse-(text|html|js|tika)|index-(basic|anchor)|query-(basic|site|url)|response-(json|xml)|summary-basic|scoring-opic|urlnormalizer-(pass|regex|basic)</value>
+  <value>watchlist-anntaylor|watchlist-burberry|watchlist-jcrew|creativecommons|protocol-http|urlfilter-regex|parse-(text|html|js|tika)|index-(basic|anchor)|query-(basic|site|url)|response-(json|xml)|summary-basic|scoring-opic|urlnormalizer-(pass|regex|basic)</value>
   <description>Regular expression naming plugin directory names to
   include.  Any plugin not matching this expression is excluded.
   In any case you need at least include the nutch-extensionpoints plugin. By

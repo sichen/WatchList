@@ -187,7 +187,7 @@
       <sysproperty key="test.data" value="${build.test}/data"/>
       <sysproperty key="test.input" value="${root}/data"/>
       <classpath refid="test.classpath"/>
-      <formatter type="plain" />
+      <formatter type="plain" usefile="true"/>
       <batchtest todir="${build.test}" unless="testcase">
         <fileset dir="${src.test}"
                  includes="**/Test*.java" excludes="**/${test.exclude}.java" />

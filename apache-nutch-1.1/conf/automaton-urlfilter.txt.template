@@ -28,7 +28,7 @@
 -.*\.(gif|GIF|jpg|JPG|ico|ICO|css|sit|eps|wmf|zip|ppt|mpg|xls|gz|rpm|tgz|mov|MOV|exe)
 
 # skip URLs containing certain characters as probable queries, etc.
--.*[?*!@=].*
+#-.*[?*!@=].*
 
 # accept anything else
 +.*

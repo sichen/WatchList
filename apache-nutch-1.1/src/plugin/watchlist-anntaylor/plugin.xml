@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<plugin
+   id="watchlist-anntaylor"
+   name="AnnTaylor Product Parser/Indexer/Querier"
+   version="1.0.0"
+   provider-name="Jun Yang">
+
+    <runtime>
+      <library name="watchlist-anntaylor.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+   <requires>
+      <import plugin="nutch-extensionpoints"/>
+   </requires>
+
+   <extension id="org.apache.nutch.watchlist.anntaylor.AnnTaylorParser"
+              name="AnnTaylor parser"
+              point="org.apache.nutch.parse.HtmlParseFilter">
+      <implementation id="AnnTaylorParser"
+                      class="org.apache.nutch.watchlist.anntaylor.AnnTaylorParser"/>
+   </extension>
+
+   <extension id="org.apache.nutch.watchlist.anntaylor.AnnTaylorIndexingFilter"
+              name="AnnTaylor indexing filter"
+              point="org.apache.nutch.indexer.IndexingFilter">
+      <implementation id="AnnTaylorIndexingFilter"
+                      class="org.apache.nutch.watchlist.anntaylor.AnnTaylorIndexingFilter"/>
+   </extension>
+
+
+   <extension id="org.apache.nutch.watchlist.anntaylor.AnnTaylorQueryFilter"
+              name="AnnTaylor query filter"
+              point="org.apache.nutch.searcher.QueryFilter">
+      <implementation id="AnnTaylorQueryFilter"
+                      class="org.apache.nutch.watchlist.anntaylor.AnnTaylorQueryFilter">
+        <parameter name="fields" value="anntaylor"/>
+      </implementation>
+
+   </extension>
+
+</plugin>
+

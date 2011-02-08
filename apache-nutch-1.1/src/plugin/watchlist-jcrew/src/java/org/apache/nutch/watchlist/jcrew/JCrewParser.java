@@ -103,10 +103,10 @@ public class JCrewParser implements HtmlParseFilter {
         // Step 1: ignore non-product pages from JCrew
         URL base;
         try {
-            base = new URL(content.getBaseUrl());
-            if (LOG.isInfoEnabled()) {
+            base = new URL(content.getUrl());
+	    if (LOG.isInfoEnabled()) {
                 LOG.info("Start parsing: " + base.toString());
-            }
+	    }
             Matcher matcher = urlRegexp.matcher(base.toString());
             if (matcher.find()) {
                 int major, minor;
@@ -124,8 +124,7 @@ public class JCrewParser implements HtmlParseFilter {
             }
 
         } catch (Exception e) {
-            // Whenever exception is caught, don't do anything and pass over to
-            // next filter
+
             return parseResult;
         }
 

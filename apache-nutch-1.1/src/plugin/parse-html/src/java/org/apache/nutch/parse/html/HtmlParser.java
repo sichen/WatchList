@@ -113,14 +113,12 @@ public class HtmlParser implements Parser {
   
   public ParseResult getParse(Content content) {
     HTMLMetaTags metaTags = new HTMLMetaTags();
-
     URL base;
     try {
       base = new URL(content.getBaseUrl());
     } catch (MalformedURLException e) {
       return new ParseStatus(e).getEmptyParseResult(content.getUrl(), getConf());
     }
-
     String text = "";
     String title = "";
     Outlink[] outlinks = new Outlink[0];
@@ -153,7 +151,7 @@ public class HtmlParser implements Parser {
       e.printStackTrace(LogUtil.getWarnStream(LOG));
       return new ParseStatus(e).getEmptyParseResult(content.getUrl(), getConf());
     }
-      
+
     // get meta directives
     HTMLMetaProcessor.getMetaTags(metaTags, root, base);
     if (LOG.isTraceEnabled()) {

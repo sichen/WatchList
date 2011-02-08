@@ -84,6 +84,8 @@
      <ant dir="urlnormalizer-basic" target="deploy"/>
      <ant dir="urlnormalizer-pass" target="deploy"/>
      <ant dir="urlnormalizer-regex" target="deploy"/>
+     <ant dir="watchlist-anntaylor" target="deploy"/>
+     <ant dir="watchlist-burberry" target="deploy"/>
      <ant dir="watchlist-jcrew" target="deploy"/>
   </target>
 
@@ -119,6 +121,8 @@
      <ant dir="urlnormalizer-basic" target="test"/>
      <ant dir="urlnormalizer-pass" target="test"/>
      <ant dir="urlnormalizer-regex" target="test"/>
+     <ant dir="watchlist-anntaylor" target="tes"/>
+     <ant dir="watchlist-burberry" target="test"/>
      <ant dir="watchlist-jcrew" target="test"/>
     </parallel>
   </target>
@@ -190,6 +194,8 @@
     <ant dir="urlnormalizer-basic" target="clean"/>
     <ant dir="urlnormalizer-pass" target="clean"/>
     <ant dir="urlnormalizer-regex" target="clean"/>
+    <ant dir="watchlist-anntaylor" target="clean"/>
+    <ant dir="watchlist-burberry" target="clean"/>
     <ant dir="watchlist-jcrew" target="clean"/>
   </target>
 </project>

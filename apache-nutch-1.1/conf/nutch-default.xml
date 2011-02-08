@@ -48,7 +48,7 @@
 
 <property>
   <name>http.agent.name</name>
-  <value>WatchList's Bot</value>
+  <value>WatchList</value>
   <description>HTTP 'User-Agent' request header. MUST NOT be empty - 
   please set this to a single word uniquely related to your organization.
 
@@ -67,7 +67,7 @@
 
 <property>
   <name>http.robots.agents</name>
-  <value>*</value>
+  <value>WatchList*</value>
   <description>The agent strings we'll look for in robots.txt files,
   comma-separated, in decreasing order of precedence. You should
   put the value of http.agent.name as the first agent name, and keep the
@@ -86,7 +86,7 @@
 
 <property>
   <name>http.agent.description</name>
-  <value></value>
+  <value>Just a Test</value>
   <description>Further description of our bot- this text is used in
   the User-Agent header.  It appears in parenthesis after the agent name.
   </description>
@@ -94,7 +94,7 @@
 
 <property>
   <name>http.agent.url</name>
-  <value></value>
+  <value>www.facebook.com/juny78</value>
   <description>A URL to advertise in the User-Agent header.  This will 
    appear in parenthesis after the agent name. Custom dictates that this
    should be a URL of a page explaining the purpose and behavior of this
@@ -104,7 +104,7 @@
 
 <property>
   <name>http.agent.email</name>
-  <value></value>
+  <value>juny78@gmail.com</value>
   <description>An email address to advertise in the HTTP 'From' request
    header and User-Agent header. A good practice is to mangle this
    address (e.g. 'info at example dot com') to avoid spamming.
@@ -113,14 +113,14 @@
 
 <property>
   <name>http.agent.version</name>
-  <value>Nutch-1.1</value>
+  <value>WatchList</value>
   <description>A version string to advertise in the User-Agent 
    header.</description>
 </property>
 
 <property>
   <name>http.agent.host</name>
-  <value></value>
+  <value>192.168.0.192</value>
   <description>Name or IP address of the host on which the Nutch crawler
   would be running. Currently this is used by 'protocol-httpclient'
   plugin.
@@ -213,7 +213,7 @@
 
 <property>
   <name>http.redirect.max</name>
-  <value>0</value>
+  <value>3</value>
   <description>The maximum number of redirects the fetcher will follow when
   trying to fetch a page. If set to negative or 0, fetcher won't immediately
   follow redirected URLs, instead it will record them for later fetching.
